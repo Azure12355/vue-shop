@@ -1,10 +1,24 @@
 <script setup lang="ts">
+import HomeService from '@/services/HomeService'
 import CustomNavBar from './components/CustomNavBar.vue'
+import { onLoad } from '@dcloudio/uni-app'
+import { ref } from 'vue'
+import type { BannerItem } from '@/types/home'
+
+const bannerList = ref<BannerItem[]>([])
+const getHomeBannerData = async () => {
+  const res = await HomeService.getHomeBannerAPI()
+  bannerList.value = res.result
+}
+
+onLoad(() => {
+  getHomeBannerData()
+})
 </script>
 
 <template>
   <CustomNavBar />
-  <XtxSwiper />
+  <XtxSwiper :list="bannerList" />
   <view class="index">index</view>
   <uni-card
     title="基础卡片"
