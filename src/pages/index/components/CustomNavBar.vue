@@ -1,7 +1,10 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+//获取屏幕边界到安全区域距离
+const { safeAreaInsets } = uni.getWindowInfo()
+</script>
 
 <template>
-  <view class="navbar">
+  <view class="navbar" :sytle="{ paddingTop: safeAreaInsets?.top + 20 + 'px' }">
     <!-- logo文字 -->
     <view class="logo">
       <image class="logo-image" src="@/static/images/logo.png"></image>
