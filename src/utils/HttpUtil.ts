@@ -2,18 +2,6 @@ import { useMemberStore } from '@/stores/modules/member'
 import type Result from '@/model/result/Result'
 
 /**
- * 添加拦截器:
- *  拦截 request 请求
- *  拦截 uploadFile 文件上传
- *
- * TODO:
- *  1.非 http 请求拼接 基础地址
- *  2.请求超时
- *  3.添加小程序请求头标识
- *  4.添加 token 令牌校验
- */
-
-/**
  * @description Http相关工具类
  */
 export default class HttpUtil {
