@@ -1,4 +1,3 @@
-import type Banner from '@/model/entity/Banner'
 import type Result from '@/model/result/Result'
 import type { BannerItem } from '@/types/home'
 import HttpUtil from '@/utils/HttpUtil'
