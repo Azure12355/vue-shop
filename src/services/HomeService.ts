@@ -1,5 +1,5 @@
 import type Result from '@/model/result/Result'
-import type { BannerItem, CategoryItem } from '@/types/home'
+import type { BannerItem, CategoryItem, HotItem } from '@/types/home'
 import HttpUtil from '@/utils/HttpUtil'
 
 export default class HomeService {
@@ -26,6 +26,17 @@ export default class HomeService {
     return HttpUtil.http<CategoryItem[]>({
       method: 'GET',
       url: '/home/category/mutli',
+    })
+  }
+
+  /**
+   * 请求热门推荐数据
+   * @returns 热门推荐数据
+   */
+  public static getHotAPI = (): Promise<Result<HotItem[]>> => {
+    return HttpUtil.http<HotItem[]>({
+      method: 'GET',
+      url: '/home/hot/mutli',
     })
   }
 }

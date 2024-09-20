@@ -2,9 +2,10 @@
 import HomeService from '@/services/HomeService'
 import CustomNavBar from './components/CustomNavBar.vue'
 import CategoryPanel from './components/CategoryPanel.vue'
+import HotPanel from './components/HotPanel.vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
-import type { BannerItem, CategoryItem } from '@/types/home'
+import type { BannerItem, CategoryItem, HotItem } from '@/types/home'
 
 const bannerList = ref<BannerItem[]>([])
 const getHomeBannerData = async () => {
@@ -18,9 +19,16 @@ const getHomeCategoryData = async () => {
   categoryList.value = res.result
 }
 
+const hotList = ref<HotItem[]>([])
+const getHotData = async () => {
+  const res = await HomeService.getHotAPI()
+  hotList.value = res.result
+}
+
 onLoad(() => {
   getHomeBannerData()
   getHomeCategoryData()
+  getHotData()
 })
 </script>
 
@@ -31,6 +39,8 @@ onLoad(() => {
   <XtxSwiper :list="bannerList" />
   <!-- 分类面板 -->
   <CategoryPanel :list="categoryList" />
+  <!-- 热门推荐 -->
+  <HotPanel :list="hotList" />
   <view class="index">index</view>
   <uni-card
     title="基础卡片"
