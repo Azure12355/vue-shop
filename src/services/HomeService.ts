@@ -1,5 +1,6 @@
 import type Result from '@/model/result/Result'
-import type { BannerItem, CategoryItem, HotItem } from '@/types/home'
+import type { PageResult } from '@/types/global'
+import type { BannerItem, CategoryItem, GuessItem, HotItem } from '@/types/home'
 import HttpUtil from '@/utils/HttpUtil'
 
 export default class HomeService {
@@ -37,6 +38,17 @@ export default class HomeService {
     return HttpUtil.http<HotItem[]>({
       method: 'GET',
       url: '/home/hot/mutli',
+    })
+  }
+
+  /**
+   * 请求猜你喜欢数据
+   * @returns 猜你喜欢数据
+   */
+  public static getHomeGoodsGuessLikeAPI = (): Promise<Result<PageResult<GuessItem>>> => {
+    return HttpUtil.http<PageResult<GuessItem>>({
+      method: 'GET',
+      url: '/home/goods/guessLike',
     })
   }
 }

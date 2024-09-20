@@ -11,6 +11,7 @@ export type BannerItem = {
   /**跳转类型 */
   type: number
 }
+
 /**
  * 首页-分类区域数据类型
  */
@@ -37,4 +38,22 @@ export type HotItem = {
   title: string
   /** 推荐类型 */
   type: string
+}
+
+/**
+ * 猜你喜欢-商品类型
+ */
+export type GuessItem = {
+  /**商品描述 */
+  desc: string
+  /**id */
+  id: string
+  /**名字 */
+  name: string
+  /**排序 */
+  orderNum: number
+  /**图片地址 */
+  picture: string
+  /**价格 */
+  price: string
 }
