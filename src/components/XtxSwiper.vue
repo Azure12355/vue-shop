@@ -13,7 +13,7 @@ const onChange: UniHelper.SwiperOnChange = (e) => {
 }
 
 //定义props接收
-const props = defineProps<{
+defineProps<{
   list: BannerItem[]
 }>()
 </script>
