@@ -1,5 +1,5 @@
 import type Result from '@/model/result/Result'
-import type { BannerItem } from '@/types/home'
+import type { BannerItem, CategoryItem } from '@/types/home'
 import HttpUtil from '@/utils/HttpUtil'
 
 export default class HomeService {
@@ -15,6 +15,17 @@ export default class HomeService {
       data: {
         distributionSite,
       },
+    })
+  }
+
+  /**
+   * 请求首页分类数据
+   * @returns 分类数据
+   */
+  public static getHomeCategoryAPI = (): Promise<Result<CategoryItem[]>> => {
+    return HttpUtil.http<CategoryItem[]>({
+      method: 'GET',
+      url: '/home/category/mutli',
     })
   }
 }

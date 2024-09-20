@@ -4,7 +4,7 @@ import CustomNavBar from './components/CustomNavBar.vue'
 import CategoryPanel from './components/CategoryPanel.vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
-import type { BannerItem } from '@/types/home'
+import type { BannerItem, CategoryItem } from '@/types/home'
 
 const bannerList = ref<BannerItem[]>([])
 const getHomeBannerData = async () => {
@@ -12,8 +12,15 @@ const getHomeBannerData = async () => {
   bannerList.value = res.result
 }
 
+const categoryList = ref<CategoryItem[]>([])
+const getHomeCategoryData = async () => {
+  const res = await HomeService.getHomeCategoryAPI()
+  categoryList.value = res.result
+}
+
 onLoad(() => {
   getHomeBannerData()
+  getHomeCategoryData()
 })
 </script>
 
@@ -23,7 +30,7 @@ onLoad(() => {
   <!-- 自定义轮播图 -->
   <XtxSwiper :list="bannerList" />
   <!-- 分类面板 -->
-  <CategoryPanel />
+  <CategoryPanel :list="categoryList" />
   <view class="index">index</view>
   <uni-card
     title="基础卡片"
