@@ -1,5 +1,5 @@
 import type Result from '@/model/result/Result'
-import type { PageResult } from '@/types/global'
+import type { PageParams, PageResult } from '@/types/global'
 import type { BannerItem, CategoryItem, GuessItem, HotItem } from '@/types/home'
 import HttpUtil from '@/utils/HttpUtil'
 
@@ -43,12 +43,16 @@ export default class HomeService {
 
   /**
    * 请求猜你喜欢数据
+   * @param data 分页参数
    * @returns 猜你喜欢数据
    */
-  public static getHomeGoodsGuessLikeAPI = (): Promise<Result<PageResult<GuessItem>>> => {
+  public static getHomeGoodsGuessLikeAPI = (
+    data?: PageParams,
+  ): Promise<Result<PageResult<GuessItem>>> => {
     return HttpUtil.http<PageResult<GuessItem>>({
       method: 'GET',
       url: '/home/goods/guessLike',
+      data,
     })
   }
 }

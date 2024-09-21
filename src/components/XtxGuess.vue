@@ -2,11 +2,31 @@
 import { onMounted, ref } from 'vue'
 import HomeService from '../services/HomeService'
 import type { GuessItem } from '@/types/home'
+import type { PageParams } from '@/types/global'
 
+const pageParams: Required<PageParams> = {
+  page: 30,
+  pageSize: 10,
+}
 const guessLikeList = ref<GuessItem[]>([])
+const finish = ref(false)
 const getHomeGoodsGuessLikeData = async () => {
-  const res = await HomeService.getHomeGoodsGuessLikeAPI()
-  guessLikeList.value = res.result.items
+  if (finish.value) {
+    uni.showToast({
+      icon: 'none',
+      title: '数据加载完毕啦~',
+    })
+    return
+  }
+  const res = await HomeService.getHomeGoodsGuessLikeAPI(pageParams)
+  guessLikeList.value.push(...res.result.items)
+
+  //判断页码是否小于页总数
+  if (pageParams.page < res.result.pages) {
+    pageParams.page++
+  } else {
+    finish.value = true
+  }
 }
 
 //组件挂载完毕
@@ -40,7 +60,10 @@ defineExpose({
       </view>
     </navigator>
   </view>
-  <view class="loading-text"> 正在加载... </view>
+
+  <view class="loading-text">
+    {{ finish ? '数据加载完毕啦~' : '正在加载...' }}
+  </view>
 </template>
 
 <style lang="scss">
