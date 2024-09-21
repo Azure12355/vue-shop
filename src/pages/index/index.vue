@@ -37,6 +37,18 @@ const onScrolltolower: UniHelper.ScrollViewOnScrolltolower = () => {
   guessRef.value?.getMore()
 }
 
+//当前下拉刷新的动画状态
+const isTriggered = ref(false)
+/**
+ * 顶部刷新回调
+ */
+const onRefresherrefresh: UniHelper.ScrollViewOnRefresherrefresh = async () => {
+  isTriggered.value = true
+  //重新请求数据
+  await Promise.all([getHomeBannerData(), getHomeCategoryData(), getHotData()])
+  isTriggered.value = false
+}
+
 onLoad(() => {
   getHomeBannerData()
   getHomeCategoryData()
@@ -49,7 +61,14 @@ onLoad(() => {
   <CustomNavBar />
 
   <!-- 滚动容器 -->
-  <scroll-view @scrolltolower="onScrolltolower" class="scroll-view" scroll-y>
+  <scroll-view
+    refresher-enabled
+    :refresher-triggered="isTriggered"
+    @refresherrefresh="onRefresherrefresh"
+    @scrolltolower="onScrolltolower"
+    class="scroll-view"
+    scroll-y
+  >
     <!-- 自定义轮播图 -->
     <XtxSwiper :list="bannerList" />
     <!-- 分类面板 -->

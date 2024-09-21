@@ -5,7 +5,7 @@ import type { GuessItem } from '@/types/home'
 import type { PageParams } from '@/types/global'
 
 const pageParams: Required<PageParams> = {
-  page: 30,
+  page: 1,
   pageSize: 10,
 }
 const guessLikeList = ref<GuessItem[]>([])
