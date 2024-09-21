@@ -25,7 +25,7 @@ uni.setNavigationBarTitle({ title: curHotMap!.title })
 //热门推荐数据
 const hotResult = ref<HotResult>()
 //分页类型
-const subTypes = ref<SubTypeItem[]>([])
+const subTypes = ref<(SubTypeItem & { finish?: boolean })[]>([])
 //高亮的tab页
 const activeIndex = ref(0)
 
@@ -39,6 +39,35 @@ const getHotRecommandData = async () => {
   subTypes.value = res.result.subTypes
 }
 
+/**
+ * 滚动触底回调
+ */
+// 滚动触底
+const onScrolltolower = async () => {
+  // 获取当前选项
+  const currsubTypes = subTypes.value[activeIndex.value]
+  // 分页条件
+  if (currsubTypes.goodsItems.page < currsubTypes.goodsItems.pages) {
+    // 当前页码累加
+    currsubTypes.goodsItems.page++
+  } else {
+    // 标记已结束
+    currsubTypes.finish = true
+    // 退出并轻提示
+    return uni.showToast({ icon: 'none', title: '没有更多数据了~' })
+  }
+
+  // 调用API传参
+  const res = await HotService.getHotRecommandAPI(curHotMap!.url, {
+    subType: currsubTypes.id,
+    page: currsubTypes.goodsItems.page,
+    pageSize: currsubTypes.goodsItems.pageSize,
+  })
+  // 新的列表选项
+  const newsubTypes = res.result.subTypes[activeIndex.value]
+  // 数组追加
+  currsubTypes.goodsItems.items.push(...newsubTypes.goodsItems.items)
+}
 onLoad(() => {
   getHotRecommandData()
 })
@@ -65,30 +94,30 @@ onLoad(() => {
     <scroll-view
       scroll-y
       class="scroll-view"
-      v-show="index === activeIndex"
       v-for="(item, index) in subTypes"
+      v-show="index === activeIndex"
       :key="item.id"
+      @scrolltolower="onScrolltolower"
     >
       <view class="goods">
         <navigator
           hover-class="none"
           class="navigator"
-          v-for="goods in 10"
-          :key="goods"
-          :url="`/pages/goods/goods?id=`"
+          v-for="goods in item.goodsItems.items"
+          :key="goods.id"
+          :url="`/pages/goods/goods?id=${goods.id}`"
         >
-          <image
-            class="thumb"
-            src="https://yanxuan-item.nosdn.127.net/5e7864647286c7447eeee7f0025f8c11.png"
-          ></image>
-          <view class="name ellipsis">不含酒精，使用安心爽肤清洁湿巾</view>
+          <image class="thumb" :src="goods.picture"></image>
+          <view class="name ellipsis">{{ goods.name }}</view>
           <view class="price">
             <text class="symbol">¥</text>
-            <text class="number">29.90</text>
+            <text class="number">{{ goods.price }}</text>
           </view>
         </navigator>
       </view>
-      <view class="loading-text">正在加载...</view>
+      <view class="loading-text">
+        {{ item.finish ? '没有更多数据了' : '正在加载...' }}
+      </view>
     </scroll-view>
   </view>
 </template>
