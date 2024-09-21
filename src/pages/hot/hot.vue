@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import HotService from '@/services/HotService'
+import type { HotResult, SubTypeItem } from '@/types/hot'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 
@@ -21,12 +22,21 @@ const curHotMap = hotMap.find((v) => v.type === query.type)
 //动态设置标题
 uni.setNavigationBarTitle({ title: curHotMap!.title })
 
+//热门推荐数据
+const hotResult = ref<HotResult>()
+//分页类型
+const subTypes = ref<SubTypeItem[]>([])
+//高亮的tab页
+const activeIndex = ref(0)
+
 //请求热门推荐数据
 const getHotRecommandData = async () => {
   const res = await HotService.getHotRecommandAPI(curHotMap!.url, {
     page: import.meta.env.DEV ? 30 : 1,
     pageSize: 10,
   })
+  hotResult.value = res.result
+  subTypes.value = res.result.subTypes
 }
 
 onLoad(() => {
@@ -38,17 +48,27 @@ onLoad(() => {
   <view class="viewport">
     <!-- 推荐封面图 -->
     <view class="cover">
-      <image
-        src="http://yjy-xiaotuxian-dev.oss-cn-beijing.aliyuncs.com/picture/2021-05-20/84abb5b1-8344-49ae-afc1-9cb932f3d593.jpg"
-      ></image>
+      <image :src="hotResult?.bannerPicture"></image>
     </view>
     <!-- 推荐选项 -->
     <view class="tabs">
-      <text class="text active">抢先尝鲜</text>
-      <text class="text">新品预告</text>
+      <text
+        v-for="(item, index) in subTypes"
+        :key="item.id"
+        class="text"
+        @tap="activeIndex = index"
+        :class="{ active: index === activeIndex }"
+        >{{ item.title }}</text
+      >
     </view>
     <!-- 推荐列表 -->
-    <scroll-view scroll-y class="scroll-view">
+    <scroll-view
+      scroll-y
+      class="scroll-view"
+      v-show="index === activeIndex"
+      v-for="(item, index) in subTypes"
+      :key="item.id"
+    >
       <view class="goods">
         <navigator
           hover-class="none"
