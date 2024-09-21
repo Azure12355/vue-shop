@@ -7,6 +7,7 @@ import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 import type { BannerItem, CategoryItem, HotItem } from '@/types/home'
 import type { XtxGuessInstance } from '@/types/component'
+import PageSkeleton from './components/PageSkeleton.vue'
 
 const bannerList = ref<BannerItem[]>([])
 const getHomeBannerData = async () => {
@@ -55,10 +56,13 @@ const onRefresherrefresh: UniHelper.ScrollViewOnRefresherrefresh = async () => {
   isTriggered.value = false
 }
 
-onLoad(() => {
-  getHomeBannerData()
-  getHomeCategoryData()
-  getHotData()
+//是否正在加载
+const isLoding = ref(false)
+
+onLoad(async () => {
+  isLoding.value = true
+  await Promise.all([getHomeBannerData(), getHomeCategoryData(), getHotData()])
+  isLoding.value = false
 })
 </script>
 
@@ -66,24 +70,28 @@ onLoad(() => {
   <!-- 自定义导航栏 -->
   <CustomNavBar />
 
-  <!-- 滚动容器 -->
-  <scroll-view
-    refresher-enabled
-    :refresher-triggered="isTriggered"
-    @refresherrefresh="onRefresherrefresh"
-    @scrolltolower="onScrolltolower"
-    class="scroll-view"
-    scroll-y
-  >
-    <!-- 自定义轮播图 -->
-    <XtxSwiper :list="bannerList" />
-    <!-- 分类面板 -->
-    <CategoryPanel :list="categoryList" />
-    <!-- 热门推荐 -->
-    <HotPanel :list="hotList" />
-    <!-- 猜你喜欢 -->
-    <XtxGuess ref="guessRef" />
-  </scroll-view>
+  <!-- 页面骨架屏 -->
+  <PageSkeleton v-if="isLoding" />
+  <template v-else>
+    <!-- 滚动容器 -->
+    <scroll-view
+      refresher-enabled
+      :refresher-triggered="isTriggered"
+      @refresherrefresh="onRefresherrefresh"
+      @scrolltolower="onScrolltolower"
+      class="scroll-view"
+      scroll-y
+    >
+      <!-- 自定义轮播图 -->
+      <XtxSwiper :list="bannerList" />
+      <!-- 分类面板 -->
+      <CategoryPanel :list="categoryList" />
+      <!-- 热门推荐 -->
+      <HotPanel :list="hotList" />
+      <!-- 猜你喜欢 -->
+      <XtxGuess ref="guessRef" />
+    </scroll-view>
+  </template>
 </template>
 
 <style lang="scss">
