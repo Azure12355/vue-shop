@@ -45,7 +45,13 @@ const isTriggered = ref(false)
 const onRefresherrefresh: UniHelper.ScrollViewOnRefresherrefresh = async () => {
   isTriggered.value = true
   //重新请求数据
-  await Promise.all([getHomeBannerData(), getHomeCategoryData(), getHotData()])
+  guessRef.value?.resetData(),
+    await Promise.all([
+      getHomeBannerData(),
+      getHomeCategoryData(),
+      getHotData(),
+      guessRef.value?.getMore(),
+    ])
   isTriggered.value = false
 }
 
