@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import HotService from '@/services/HotService'
+import { onLoad } from '@dcloudio/uni-app'
+import { ref } from 'vue'
+
 // 热门推荐页 标题和url
 const hotMap = [
   { type: '1', title: '特惠推荐', url: '/hot/preference' },
@@ -6,6 +10,28 @@ const hotMap = [
   { type: '3', title: '一站买全', url: '/hot/oneStop' },
   { type: '4', title: '新鲜好物', url: '/hot/new' },
 ]
+
+//接收路由传参
+const query = defineProps<{
+  type: string
+}>()
+
+const curHotMap = hotMap.find((v) => v.type === query.type)
+
+//动态设置标题
+uni.setNavigationBarTitle({ title: curHotMap!.title })
+
+//请求热门推荐数据
+const getHotRecommandData = async () => {
+  const res = await HotService.getHotRecommandAPI(curHotMap!.url, {
+    page: import.meta.env.DEV ? 30 : 1,
+    pageSize: 10,
+  })
+}
+
+onLoad(() => {
+  getHotRecommandData()
+})
 </script>
 
 <template>
