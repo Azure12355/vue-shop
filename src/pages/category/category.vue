@@ -5,6 +5,7 @@ import type { MainCateogry } from "@/types/category"
 import type { BannerItem } from "@/types/home"
 import { onLoad } from "@dcloudio/uni-app"
 import { ref } from "vue"
+import PageSkeleton from "./components/PageSkeleton.vue"
 
 //轮播图列表数据
 const bannerList = ref<BannerItem[]>([])
@@ -24,15 +25,17 @@ const getCategoryData = async () => {
 //激活的tab选项
 const activeIndex = ref(0)
 
+// 数据是否加载完毕
+const isFinished = ref(false)
 //界面启动加载
-onLoad(() => {
-  getBannerData()
-  getCategoryData()
+onLoad(async () => {
+  await Promise.all([getBannerData(), getCategoryData()])
+  isFinished.value = true
 })
 </script>
 
 <template>
-  <view class="viewport">
+  <view class="viewport" v-if="isFinished">
     <!-- 搜索框 -->
     <view class="search">
       <view class="input">
@@ -58,7 +61,7 @@ onLoad(() => {
         <!-- 焦点图 -->
         <XtxSwiper class="banner" :list="bannerList" />
         <!-- 内容区域 -->
-        <view class="panel" v-for="item in categoryList[activeIndex].children" :key="item">
+        <view class="panel" v-for="item in categoryList[activeIndex]?.children || []" :key="item">
           <view class="title">
             <text class="name">{{ item.name }}</text>
             <navigator class="more" hover-class="none">全部</navigator>
@@ -83,6 +86,7 @@ onLoad(() => {
       </scroll-view>
     </view>
   </view>
+  <PageSkeleton v-else />
 </template>
 
 <style lang="scss">
