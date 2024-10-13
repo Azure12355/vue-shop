@@ -1,18 +1,7 @@
 <script setup lang="ts">
-import { useMemberStore } from '@/stores/modules/member'
-import HttpUtil from '@/utils/HttpUtil'
-import type Result from '@/model/result/Result'
-import Banner from '@/model/entity/Banner'
+import { useMemberStore } from "@/stores/modules/member"
 
 const memberStore = useMemberStore()
-
-const getData = async () => {
-  const res: Result<Banner[]> = await HttpUtil.http<Banner[]>({
-    method: 'GET',
-    url: '/member/profile',
-  })
-  console.log(res)
-}
 </script>
 
 <template>
@@ -31,7 +20,6 @@ const getData = async () => {
       保存用户信息
     </button>
     <button @tap="memberStore.clearProfile()" size="mini" plain type="warn">清理用户信息</button>
-    <button @tap="getData" size="mini" plain type="primary">测试请求</button>
   </view>
 </template>
 

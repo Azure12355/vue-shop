@@ -1,7 +1,6 @@
-import type Result from '@/model/result/Result'
-import type { PageParams, PageResult } from '@/types/global'
-import type { BannerItem, CategoryItem, GuessItem, HotItem } from '@/types/home'
-import HttpUtil from '@/utils/HttpUtil'
+import type { PageParams, PageResult, Result } from "@/types/global"
+import type { BannerItem, CategoryItem, GuessItem, HotItem } from "@/types/home"
+import HttpUtil from "@/utils/HttpUtil"
 
 export default class HomeService {
   /**
@@ -11,8 +10,8 @@ export default class HomeService {
    */
   public static getHomeBannerAPI = (distributionSite = 1): Promise<Result<BannerItem[]>> => {
     return HttpUtil.http<BannerItem[]>({
-      method: 'GET',
-      url: '/home/banner',
+      method: "GET",
+      url: "/home/banner",
       data: {
         distributionSite,
       },
@@ -25,8 +24,8 @@ export default class HomeService {
    */
   public static getHomeCategoryAPI = (): Promise<Result<CategoryItem[]>> => {
     return HttpUtil.http<CategoryItem[]>({
-      method: 'GET',
-      url: '/home/category/mutli',
+      method: "GET",
+      url: "/home/category/mutli",
     })
   }
 
@@ -36,8 +35,8 @@ export default class HomeService {
    */
   public static getHotAPI = (): Promise<Result<HotItem[]>> => {
     return HttpUtil.http<HotItem[]>({
-      method: 'GET',
-      url: '/home/hot/mutli',
+      method: "GET",
+      url: "/home/hot/mutli",
     })
   }
 
@@ -50,8 +49,8 @@ export default class HomeService {
     data?: PageParams,
   ): Promise<Result<PageResult<GuessItem>>> => {
     return HttpUtil.http<PageResult<GuessItem>>({
-      method: 'GET',
-      url: '/home/goods/guessLike',
+      method: "GET",
+      url: "/home/goods/guessLike",
       data,
     })
   }

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import HomeService from '../services/HomeService'
-import type { GuessItem } from '@/types/home'
-import type { PageParams } from '@/types/global'
+import { onMounted, ref } from "vue"
+import HomeService from "../services/HomeService"
+import type { GuessItem } from "@/types/home"
+import type { PageParams } from "@/types/global"
 
 const pageParams: Required<PageParams> = {
   page: 1,
@@ -13,8 +13,8 @@ const finish = ref(false)
 const getHomeGoodsGuessLikeData = async () => {
   if (finish.value) {
     uni.showToast({
-      icon: 'none',
-      title: '数据加载完毕啦~',
+      icon: "none",
+      title: "数据加载完毕啦~",
     })
     return
   }
@@ -72,7 +72,7 @@ defineExpose({
   </view>
 
   <view class="loading-text">
-    {{ finish ? '数据加载完毕啦~' : '正在加载...' }}
+    {{ finish ? "数据加载完毕啦~" : "正在加载..." }}
   </view>
 </template>
 
@@ -96,7 +96,7 @@ defineExpose({
 
     &::before,
     &::after {
-      content: '';
+      content: "";
       width: 20rpx;
       height: 20rpx;
       background-image: url(@/static/images/bubble.png);

@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import HomeService from '@/services/HomeService'
-import type { BannerItem } from '@/types/home'
-import { onLoad } from '@dcloudio/uni-app'
-import { ref } from 'vue'
+import CategoryService from "@/services/CategoryService"
+import HomeService from "@/services/HomeService"
+import type { MainCateogry } from "@/types/category"
+import type { BannerItem } from "@/types/home"
+import { onLoad } from "@dcloudio/uni-app"
+import { ref } from "vue"
 
 //轮播图列表数据
 const bannerList = ref<BannerItem[]>([])
@@ -12,9 +14,20 @@ const getBannerData = async () => {
   bannerList.value = res.result
 }
 
+//分类列表数据
+const categoryList = ref<MainCateogry[]>([])
+//获取分类列表数据
+const getCategoryData = async () => {
+  const res = await CategoryService.getCategoryListAPI()
+  categoryList.value = res.result
+}
+//激活的tab选项
+const activeIndex = ref(0)
+
 //界面启动加载
 onLoad(() => {
   getBannerData()
+  getCategoryData()
 })
 </script>
 
@@ -30,8 +43,14 @@ onLoad(() => {
     <view class="categories">
       <!-- 左侧：一级分类 -->
       <scroll-view class="primary" scroll-y>
-        <view v-for="(item, index) in 10" :key="item" class="item" :class="{ active: index === 0 }">
-          <text class="name"> 居家 </text>
+        <view
+          v-for="(item, index) in categoryList"
+          :key="item.id"
+          class="item"
+          @tap="activeIndex = index"
+          :class="{ active: index === activeIndex }"
+        >
+          <text class="name"> {{ item.name }} </text>
         </view>
       </scroll-view>
       <!-- 右侧：二级分类 -->
@@ -39,27 +58,24 @@ onLoad(() => {
         <!-- 焦点图 -->
         <XtxSwiper class="banner" :list="bannerList" />
         <!-- 内容区域 -->
-        <view class="panel" v-for="item in 3" :key="item">
+        <view class="panel" v-for="item in categoryList[activeIndex].children" :key="item">
           <view class="title">
-            <text class="name">宠物用品</text>
+            <text class="name">{{ item.name }}</text>
             <navigator class="more" hover-class="none">全部</navigator>
           </view>
           <view class="section">
             <navigator
-              v-for="goods in 4"
+              v-for="goods in item.goods"
               :key="goods"
               class="goods"
               hover-class="none"
-              :url="`/pages/goods/goods?id=`"
+              :url="`/pages/goods/goods?id=${goods.id}`"
             >
-              <image
-                class="image"
-                src="https://yanxuan-item.nosdn.127.net/674ec7a88de58a026304983dd049ea69.jpg"
-              ></image>
-              <view class="name ellipsis">木天蓼逗猫棍</view>
+              <image class="image" :src="goods.picture"></image>
+              <view class="name ellipsis">{{ goods.name }}</view>
               <view class="price">
                 <text class="symbol">¥</text>
-                <text class="number">16.00</text>
+                <text class="number">{{ goods.price }}</text>
               </view>
             </navigator>
           </view>
@@ -120,7 +136,7 @@ page {
     color: #595c63;
     position: relative;
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       left: 42rpx;
       bottom: 0;
@@ -131,7 +147,7 @@ page {
   .active {
     background-color: #fff;
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       left: 0;
       top: 0;
@@ -172,8 +188,8 @@ page {
   }
   .more {
     &::after {
-      font-family: 'erabbit' !important;
-      content: '\e6c2';
+      font-family: "erabbit" !important;
+      content: "\e6c2";
     }
   }
   .section {

@@ -1,3 +1,4 @@
+/**分页返回结果类型 */
 export type PageResult<T> = {
   /**列表数据 */
   items: T[]
@@ -9,6 +10,13 @@ export type PageResult<T> = {
   pageSize: number
   /**总页数 */
   pages: number
+}
+
+/**通用返回结果类型 */
+export type Result<T> = {
+  code: string
+  msg: string
+  result: T
 }
 
 /**通用分页参数类型 */

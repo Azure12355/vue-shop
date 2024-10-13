@@ -1,4 +1,4 @@
-import type { GoodsItem } from './global'
+import type { GoodsItem } from "./global"
 
 /**
  * 首页-广告区域数据类型

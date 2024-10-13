@@ -1,4 +1,4 @@
-import type { GoodsItem } from './global'
+import type { GoodsItem } from "./global"
 
 /**
  * 分类-一级分类

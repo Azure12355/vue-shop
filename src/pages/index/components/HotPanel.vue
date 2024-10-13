@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { HotItem } from '@/types/home'
+import type { HotItem } from "@/types/home"
 
 //接收props
 defineProps<{

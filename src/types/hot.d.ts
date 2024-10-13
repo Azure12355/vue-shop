@@ -1,4 +1,4 @@
-import type { PageResult, GoodsItem } from './global'
+import type { PageResult, GoodsItem } from "./global"
 
 /** 热门推荐 */
 export type HotResult = {
