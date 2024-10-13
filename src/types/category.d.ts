@@ -31,7 +31,7 @@ export type ChildCategory = {
   /**父分类名称 */
   parentName: null
   /**商品集合 */
-  godds: GoodsItem[]
+  goods: GoodsItem[]
   /**分类 */
   categories: null
   /**品牌 */
