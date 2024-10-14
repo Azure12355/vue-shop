@@ -1,19 +1,19 @@
-import { useMemberStore } from '@/stores/modules/member'
-import type Result from '@/model/result/Result'
+import { useMemberStore } from "@/stores/modules/member"
+import type { Result } from "@/types/global"
 
 /**
  * @description Http相关工具类
  */
 export default class HttpUtil {
   //网络请求的基地址
-  private static BASE_URL = 'https://pcapi-xiaotuxian-front-devtest.itheima.net'
+  private static BASE_URL = "https://pcapi-xiaotuxian-front-devtest.itheima.net"
 
   //uni的拦截器
   private uniInterceptor: UniNamespace.InterceptorOptions = {
     //请求拦截器
     invoke: (options: UniApp.RequestOptions) => {
       // 1.拼接基础地址
-      if (!options.url.startsWith('http')) {
+      if (!options.url.startsWith("http")) {
         options.url = HttpUtil.BASE_URL + options.url
       }
       // 2.请求超时, 设置成10s
@@ -22,7 +22,7 @@ export default class HttpUtil {
       options.header = {
         //保留实际配置的header, 避免被覆盖
         ...options.header,
-        'source-client': 'miniapp',
+        "source-client": "miniapp",
       }
       // 4.添加 token 令牌
       this.setToken(options)
@@ -38,7 +38,7 @@ export default class HttpUtil {
     if (token) {
       options.header.Authorization = token
     } else {
-      options.header.Authorization = 'test'
+      options.header.Authorization = "test"
     }
   }
 
@@ -47,9 +47,9 @@ export default class HttpUtil {
    * @returns void
    */
   public setUniInterceptor(): void {
-    uni.addInterceptor('request', this.uniInterceptor)
-    uni.addInterceptor('uploadFile', this.uniInterceptor)
-    console.log('uni的拦截器设置成功!!!')
+    uni.addInterceptor("request", this.uniInterceptor)
+    uni.addInterceptor("uploadFile", this.uniInterceptor)
+    console.log("uni的拦截器设置成功!!!")
   }
 
   /**
@@ -73,17 +73,17 @@ export default class HttpUtil {
             useMemberStore().clearProfile()
 
             uni.showToast({
-              icon: 'none',
-              title: (result.data as Result<T>).msg || 'token令牌失效,请重新登录',
+              icon: "none",
+              title: (result.data as Result<T>).msg || "token令牌失效,请重新登录",
             })
             //跳转到登录界面
-            uni.navigateTo({ url: '/pages/login/login' })
+            uni.navigateTo({ url: "/pages/login/login" })
             reject(result)
           } else {
             //通用错误, 调用reject
             uni.showToast({
-              title: (result.data as Result<T>).msg || '请求出错了',
-              icon: 'none',
+              title: (result.data as Result<T>).msg || "请求出错了",
+              icon: "none",
             })
             reject(result)
           }
@@ -93,8 +93,8 @@ export default class HttpUtil {
         fail(err) {
           //网络错误
           uni.showToast({
-            icon: 'none',
-            title: '网络出错啦, 换个网络试试',
+            icon: "none",
+            title: "网络出错啦, 换个网络试试",
           })
           reject(err)
         },
