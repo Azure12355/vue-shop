@@ -6,8 +6,8 @@ import HotPanel from "./components/HotPanel.vue"
 import { onLoad } from "@dcloudio/uni-app"
 import { ref } from "vue"
 import type { BannerItem, CategoryItem, HotItem } from "@/types/home"
-import type { XtxGuessInstance } from "@/types/component"
 import PageSkeleton from "./components/PageSkeleton.vue"
+import { useGuessLike } from "@/composables/useGuessLike"
 
 const bannerList = ref<BannerItem[]>([])
 const getHomeBannerData = async () => {
@@ -27,16 +27,7 @@ const getHotData = async () => {
   hotList.value = res.result
 }
 
-//获取猜你喜欢组件实例
-const guessRef = ref<XtxGuessInstance>()
-/**
- * 滚动触底回调
- */
-const onScrolltolower: UniHelper.ScrollViewOnScrolltolower = () => {
-  console.log("滚动触底了~")
-  console.log(guessRef)
-  guessRef.value?.getMore()
-}
+const { guessRef, onScrolltolower } = useGuessLike()
 
 //当前下拉刷新的动画状态
 const isTriggered = ref(false)
