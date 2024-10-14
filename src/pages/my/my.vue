@@ -1,8 +1,7 @@
-// src/pages/my/my.vue
-
 <script setup lang="ts">
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
+
 // 订单选项
 const orderTypes = [
   { type: 1, text: "待付款", icon: "icon-currency" },
