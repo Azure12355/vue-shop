@@ -1,5 +1,43 @@
 <script setup lang="ts">
-//
+import LoginService from "@/services/LoginService"
+import { onLoad } from "@dcloudio/uni-app"
+
+//手机号快捷登录
+let code = ""
+
+//获取用户手机号
+const onGetphonenumber: UniHelper.ButtonOnGetphonenumber = async (event) => {
+  console.log(event)
+  //获取参数
+  const encryptedData = event.detail.encryptedData!
+  const iv = event.detail.iv!
+  console.log("encryptedData: ", encryptedData)
+  console.log("iv: ", iv)
+  //发送登录请求
+  await LoginService.postWxMinAPI({
+    code,
+    encryptedData,
+    iv,
+  })
+  //登录成功提示
+  uni.showToast({
+    icon: "none",
+    title: "登录成功",
+  })
+}
+
+const phoneNumberLogin = () => {
+  uni.showToast({
+    icon: "none",
+    title: "开发限制，该功能暂时无法实现~",
+  })
+}
+
+onLoad(async () => {
+  const res = await wx.login()
+  code = res.code
+  console.log("code: ", code)
+})
 </script>
 
 <template>
@@ -16,7 +54,11 @@
       <!-- <button class="button phone">登录</button> -->
 
       <!-- 小程序端授权登录 -->
-      <button class="button phone">
+      <!-- <button class="button phone" open-type="getPhoneNumber" bindgetphonenumber="onGetphonenumber">
+        <text class="icon icon-phone"></text>
+        手机号快捷登录
+      </button> -->
+      <button class="button phone" @tap="phoneNumberLogin">
         <text class="icon icon-phone"></text>
         手机号快捷登录
       </button>
