@@ -1,5 +1,5 @@
 /**用户信息 */
-export type UserInfo = {
+export type MemberInfo = {
   /**用户id */
   id: string
   /**用户手机号 */

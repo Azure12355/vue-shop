@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import LoginService from "@/services/LoginService"
+import { useMemberStore } from "@/stores"
 import { onLoad } from "@dcloudio/uni-app"
 
 //获取用户手机号
-const onGetPhoneNumber: UniHelper.ButtonOnGetphonenumber = async (event) => {
+/* const onGetPhoneNumber: UniHelper.ButtonOnGetphonenumber = async (event) => {
   console.log(event)
   //获取参数
   const encryptedData = event.detail.encryptedData!
@@ -21,7 +22,7 @@ const onGetPhoneNumber: UniHelper.ButtonOnGetphonenumber = async (event) => {
     icon: "none",
     title: "登录成功",
   })
-}
+} */
 //小程序手机号登录
 const phoneNumberLogin = () => {
   uni.showToast({
@@ -33,7 +34,9 @@ const phoneNumberLogin = () => {
 //模拟小程序手机号登录
 const onGetPhoneNumberSimple = async () => {
   const res = await LoginService.postLoginWxMinSimpleAPI("18916181099")
-  console.log(res)
+  //使用pinia进行持久化保存
+  const memberStore = useMemberStore()
+  memberStore.setProfile(res.result)
   uni.showToast({
     icon: "none",
     title: "登录成功",
