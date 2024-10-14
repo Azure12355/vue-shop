@@ -37,10 +37,15 @@ const onGetPhoneNumberSimple = async () => {
   //使用pinia进行持久化保存
   const memberStore = useMemberStore()
   memberStore.setProfile(res.result)
+  //成功回显
   uni.showToast({
     icon: "none",
     title: "登录成功",
   })
+  setTimeout(() => {
+    //页面跳转
+    uni.switchTab({ url: "/pages/my/my" })
+  }, 500)
 }
 </script>
 
