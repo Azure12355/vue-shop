@@ -2,6 +2,12 @@
 import { useMemberStore } from "@/stores/modules/member"
 
 const memberStore = useMemberStore()
+
+const goToLogin = () => {
+  uni.navigateTo({
+    url: "/pages/login/login",
+  })
+}
 </script>
 
 <template>
@@ -20,6 +26,7 @@ const memberStore = useMemberStore()
       保存用户信息
     </button>
     <button @tap="memberStore.clearProfile()" size="mini" plain type="warn">清理用户信息</button>
+    <button @tap="goToLogin" size="mini" plain type="warn">点击登录</button>
   </view>
 </template>
 
