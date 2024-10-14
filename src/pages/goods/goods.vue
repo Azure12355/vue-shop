@@ -1,7 +1,24 @@
-// src/pages/goods/goods.vue
 <script setup lang="ts">
+import GoodsService from "@/services/GoodsService"
+import { onLoad } from "@dcloudio/uni-app"
+
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
+
+//获取路由传入的id
+const query = defineProps<{
+  id: string
+}>()
+console.log(query.id)
+
+const getGoodsData = async () => {
+  const res = await GoodsService.getGoodsByIdAPI(query.id)
+  console.log(res.result)
+}
+
+onLoad(() => {
+  getGoodsData()
+})
 </script>
 
 <template>

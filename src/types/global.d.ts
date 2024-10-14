@@ -14,7 +14,7 @@ export type PageResult<T> = {
 
 /**通用返回结果类型 */
 export type Result<T> = {
-  code: string
+  code?: string
   msg: string
   result: T
 }
