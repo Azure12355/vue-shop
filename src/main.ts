@@ -1,8 +1,8 @@
-import { createSSRApp } from 'vue'
-import pinia from './stores'
+import { createSSRApp } from "vue"
+import pinia from "./stores"
 
-import App from './App.vue'
-import HttpUtil from './utils/HttpUtil'
+import App from "./App.vue"
+import HttpUtil from "./utils/HttpUtil"
 export function createApp() {
   const app = createSSRApp(App)
   app.use(pinia)

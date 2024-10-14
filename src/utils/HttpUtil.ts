@@ -17,7 +17,7 @@ export default class HttpUtil {
         options.url = HttpUtil.BASE_URL + options.url
       }
       // 2.请求超时, 设置成10s
-      options.timeout = 1000
+      options.timeout = 10000
       // 3.添加小程序调用请求头
       options.header = {
         //保留实际配置的header, 避免被覆盖
