@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import GoodsService from "@/services/GoodsService"
+import type { GoodsDetails } from "@/types/goods"
 import { onLoad } from "@dcloudio/uni-app"
+import { ref, watch } from "vue"
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
@@ -11,9 +13,19 @@ const query = defineProps<{
 }>()
 console.log(query.id)
 
+//商品详情的响应式数据
+const goods = ref<GoodsDetails>()
+//获取商品详情数据
 const getGoodsData = async () => {
   const res = await GoodsService.getGoodsByIdAPI(query.id)
-  console.log(res.result)
+  goods.value = res.result
+}
+
+//轮播图下标索引
+const currentIndex = ref(0)
+//滑块改变事件回调
+const onSwiperChange: UniHelper.SwiperOnChange = (event) => {
+  currentIndex.value = event.detail.current
 }
 
 onLoad(() => {
@@ -27,42 +39,15 @@ onLoad(() => {
     <view class="goods">
       <!-- 商品主图 -->
       <view class="preview">
-        <swiper circular>
-          <swiper-item>
-            <image
-              mode="aspectFill"
-              src="https://yanxuan-item.nosdn.127.net/99c83709ca5f9fd5c5bb35d207ad7822.png"
-            />
-          </swiper-item>
-          <swiper-item>
-            <image
-              mode="aspectFill"
-              src="https://yanxuan-item.nosdn.127.net/f9107d47c08f0b99c097e30055c39e1a.png"
-            />
-          </swiper-item>
-          <swiper-item>
-            <image
-              mode="aspectFill"
-              src="https://yanxuan-item.nosdn.127.net/754c56785cc8c39f7414752f62d79872.png"
-            />
-          </swiper-item>
-          <swiper-item>
-            <image
-              mode="aspectFill"
-              src="https://yanxuan-item.nosdn.127.net/ef16f8127610ef56a2a10466d6dae157.jpg"
-            />
-          </swiper-item>
-          <swiper-item>
-            <image
-              mode="aspectFill"
-              src="https://yanxuan-item.nosdn.127.net/1f0c3f5d32b0e804deb9b3d56ea6c3b2.png"
-            />
+        <swiper circular @change="onSwiperChange">
+          <swiper-item v-for="(item, index) in goods?.mainPictures || []" :key="index">
+            <image mode="aspectFill" :src="item" />
           </swiper-item>
         </swiper>
         <view class="indicator">
-          <text class="current">1</text>
+          <text class="current">{{ currentIndex + 1 }}</text>
           <text class="split">/</text>
-          <text class="total">5</text>
+          <text class="total">{{ goods?.mainPictures.length || 1 }}</text>
         </view>
       </view>
 
@@ -70,10 +55,10 @@ onLoad(() => {
       <view class="meta">
         <view class="price">
           <text class="symbol">¥</text>
-          <text class="number">29.90</text>
+          <text class="number">{{ goods?.price || 0.0 }}</text>
         </view>
-        <view class="name ellipsis">云珍·轻软旅行长绒棉方巾 </view>
-        <view class="desc"> 轻巧无捻小方巾，旅行便携 </view>
+        <view class="name ellipsis">{{ goods?.name || "神秘商品" }} </view>
+        <view class="desc"> {{ goods?.desc || "一件非常有个性的商品" }} </view>
       </view>
 
       <!-- 操作面板 -->
@@ -101,24 +86,18 @@ onLoad(() => {
       <view class="content">
         <view class="properties">
           <!-- 属性详情 -->
-          <view class="item">
-            <text class="label">属性名</text>
-            <text class="value">属性值</text>
-          </view>
-          <view class="item">
-            <text class="label">属性名</text>
-            <text class="value">属性值</text>
+          <view class="item" v-for="(item, index) in goods?.details?.properties || []" :key="index">
+            <text class="label">{{ item.name }}</text>
+            <text class="value">{{ item.value }}</text>
           </view>
         </view>
         <!-- 图片详情 -->
         <image
+          v-for="(item, index) in goods?.details?.pictures || []"
+          :key="index"
           mode="widthFix"
-          src="https://yanxuan-item.nosdn.127.net/a8d266886d31f6eb0d7333c815769305.jpg"
-        ></image>
-        <image
-          mode="widthFix"
-          src="https://yanxuan-item.nosdn.127.net/a9bee1cb53d72e6cdcda210071cbd46a.jpg"
-        ></image>
+          :src="item"
+        />
       </view>
     </view>
 
@@ -129,21 +108,17 @@ onLoad(() => {
       </view>
       <view class="content">
         <navigator
-          v-for="item in 4"
+          v-for="item in goods?.similarProducts || []"
           :key="item"
           class="goods"
           hover-class="none"
-          :url="`/pages/goods/goods?id=`"
+          :url="`/pages/goods/goods?id=${item.id}`"
         >
-          <image
-            class="image"
-            mode="aspectFill"
-            src="https://yanxuan-item.nosdn.127.net/e0cea368f41da1587b3b7fc523f169d7.png"
-          ></image>
-          <view class="name ellipsis">简约山形纹全棉提花毛巾</view>
+          <image class="image" mode="aspectFill" :src="item.picture" />
+          <view class="name ellipsis">{{ item?.name || "神秘商品" }}</view>
           <view class="price">
             <text class="symbol">¥</text>
-            <text class="number">18.50</text>
+            <text class="number">{{ item?.price || "0.0" }}</text>
           </view>
         </navigator>
       </view>
