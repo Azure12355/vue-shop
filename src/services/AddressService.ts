@@ -1,4 +1,4 @@
-import type { AddressParams } from "@/types/address"
+import type { AddressItem, AddressParams } from "@/types/address"
 import HttpUtil from "@/utils/HttpUtil"
 import type { Result } from "@/types/global"
 
@@ -11,9 +11,19 @@ export default class AddressService {
     addressParam: AddressParams,
   ): Promise<Result<{ id: string }>> => {
     return HttpUtil.http<{ id: string }>({
-      method: "GET",
+      method: "POST",
       url: "/member/address",
       data: addressParam,
+    })
+  }
+
+  /**
+   * 获取收获地址列表
+   */
+  public static getMemberAddressAPI = (): Promise<Result<AddressItem[]>> => {
+    return HttpUtil.http<AddressItem[]>({
+      method: "GET",
+      url: "/member/address",
     })
   }
 }
