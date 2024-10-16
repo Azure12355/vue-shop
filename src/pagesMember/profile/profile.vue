@@ -1,6 +1,24 @@
 <script setup lang="ts">
 // 获取屏幕边界到安全区域距离
+
+import { ref } from "vue"
+import type { MemberProfileInfo } from "@/types/member"
+import MemberService from "@/services/MemberService"
+import { onLoad } from "@dcloudio/uni-app"
+
 const { safeAreaInsets } = uni.getSystemInfoSync()
+
+//会员简介信息
+const profile = ref<MemberProfileInfo>()
+//获取会员简介信息
+const getMemberProfileData = async () => {
+  const res = await MemberService.getMemberProfileAPI()
+  profile.value = res.result
+}
+
+onLoad(() => {
+  getMemberProfileData()
+})
 </script>
 
 <template>
