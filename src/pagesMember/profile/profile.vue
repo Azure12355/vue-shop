@@ -2,18 +2,98 @@
 // 获取屏幕边界到安全区域距离
 
 import { ref } from "vue"
-import type { MemberProfileInfo } from "@/types/member"
+import type { Gender, MemberProfileInfo } from "@/types/member"
 import MemberService from "@/services/MemberService"
 import { onLoad } from "@dcloudio/uni-app"
+import { useMemberStore } from "@/stores"
 
 const { safeAreaInsets } = uni.getSystemInfoSync()
 
 //会员简介信息
-const profile = ref<MemberProfileInfo>()
+const profile = ref({} as MemberProfileInfo)
 //获取会员简介信息
 const getMemberProfileData = async () => {
   const res = await MemberService.getMemberProfileAPI()
   profile.value = res.result
+}
+
+//修改性别
+const onGenderChange: UniHelper.RadioGroupOnChange = (e) => {
+  profile.value.gender = e.detail.value as Gender
+}
+
+//修改生日
+const onBirthdayChange: UniHelper.DatePickerOnChange = (e) => {
+  profile.value.birthday = e.detail.value
+}
+
+//修改城市
+let fullLocationCode: string[] = ["", "", ""]
+const onFullLocationChange: UniHelper.RegionPickerOnChange = (e) => {
+  profile.value.fullLocation = e.detail.value.join(" ")
+  fullLocationCode = e.detail.code!
+}
+
+const memberStore = useMemberStore()
+//点击保存提交表单
+const onSubmit = async () => {
+  const { nickname, gender, birthday, profession } = profile.value
+  const res = await MemberService.putMemberProfileAPI({
+    nickname,
+    gender,
+    birthday,
+    profession,
+    provinceCode: fullLocationCode[0] || null,
+    cityCode: fullLocationCode[1] || null,
+    countyCode: fullLocationCode[2] || null,
+  })
+  // 更新Store昵称
+  memberStore.profile!.nickname = res.result.nickname
+  uni.showToast({ icon: "success", title: "保存成功" })
+  setTimeout(() => {
+    uni.navigateBack()
+  }, 400)
+}
+
+//修改头像
+const onAvatarChange = () => {
+  //调用拍照/选择图片
+  uni.chooseMedia({
+    //文件个数
+    count: 1,
+    //文件类型
+    mediaType: ["image"],
+    success: (res) => {
+      //本地路径
+      const { tempFilePath } = res.tempFiles[0]
+      console.log(tempFilePath)
+      //文件上传
+      uni.uploadFile({
+        url: "/member/profile/avatar",
+        name: "file",
+        filePath: tempFilePath,
+        success: (res) => {
+          if (res.statusCode === 200) {
+            //提取头像
+            const { avatar } = JSON.parse(res.data).result
+            //当前页面更新头像
+            profile.value!.avatar = avatar
+            //更新store中的头像
+            memberStore.profile!.avatar = avatar
+            uni.showToast({
+              icon: "success",
+              title: "更新成功",
+            })
+          } else {
+            uni.showToast({
+              icon: "error",
+              title: "出现错误",
+            })
+          }
+        },
+      })
+    },
+  })
 }
 
 onLoad(() => {
@@ -29,7 +109,7 @@ onLoad(() => {
       <view class="title">个人信息</view>
     </view>
     <!-- 头像 -->
-    <view class="avatar">
+    <view class="avatar" @tap="onAvatarChange">
       <view class="avatar-content">
         <image class="image" src=" " mode="aspectFill" />
         <text class="text">点击修改头像</text>
@@ -45,11 +125,11 @@ onLoad(() => {
         </view>
         <view class="form-item">
           <text class="label">昵称</text>
-          <input class="input" type="text" placeholder="请填写昵称" :value="profile?.nickname" />
+          <input class="input" type="text" placeholder="请填写昵称" v-model="profile.nickname" />
         </view>
         <view class="form-item">
           <text class="label">性别</text>
-          <radio-group>
+          <radio-group @change="onGenderChange">
             <label class="radio">
               <radio value="男" color="#27ba9b" :checked="profile?.gender === '男'" />
               男
@@ -67,26 +147,32 @@ onLoad(() => {
             mode="date"
             start="1900-01-01"
             :end="new Date()"
-            :value="profile?.birthday"
+            :value="profile.birthday"
+            @change="onBirthdayChange"
           >
-            <view v-if="profile?.birthday">{{ profile?.birthday }}</view>
+            <view v-if="profile.birthday">{{ profile.birthday }}</view>
             <view class="placeholder" v-else>请选择日期</view>
           </picker>
         </view>
         <view class="form-item">
           <text class="label">城市</text>
-          <picker class="picker" mode="region" :value="profile?.fullLocation.split(' ')">
-            <view v-if="false">{{ profile?.fullLocation }}</view>
+          <picker
+            class="picker"
+            mode="region"
+            :value="profile?.fullLocation?.split(' ')"
+            @change="onFullLocationChange"
+          >
+            <view v-if="profile.fullLocation">{{ profile?.fullLocation }}</view>
             <view class="placeholder" v-else>请选择城市</view>
           </picker>
         </view>
         <view class="form-item">
           <text class="label">职业</text>
-          <input class="input" type="text" placeholder="请填写职业" :value="profile?.profession" />
+          <input class="input" type="text" placeholder="请填写职业" v-model="profile.profession" />
         </view>
       </view>
       <!-- 提交按钮 -->
-      <button class="form-button">保 存</button>
+      <button class="form-button" @tap="onSubmit">保 存</button>
     </view>
   </view>
 </template>
@@ -204,6 +290,7 @@ page {
     .picker {
       flex: 1;
     }
+
     .placeholder {
       color: #808080;
     }

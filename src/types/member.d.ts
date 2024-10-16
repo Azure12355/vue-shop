@@ -47,3 +47,38 @@ export type MemberProfileInfo = MemberBaseInfo & {
  * 性别，男、女、未知
  */
 export type Gender = "男" | "女" | "未知"
+
+/**
+ * 个人信息-修改：请求体参数
+ */
+export type MemberProfileUpdateParam = {
+  /**
+   * 生日 YYYY-MM-DD
+   */
+  birthday?: null | string
+  /**
+   * 城市编码
+   */
+  cityCode?: null | string
+  /**
+   * 区/县编码
+   */
+  countyCode?: null | string
+  /**
+   * 性别，男、女、未知
+   */
+  gender?: Gender
+  /**
+   * 昵称
+   */
+  nickname?: null | string
+  /**
+   * 职业
+   */
+  profession?: null | string
+  /**
+   * 省份编码
+   */
+  provinceCode?: null | string
+  [property: string]: any
+}
