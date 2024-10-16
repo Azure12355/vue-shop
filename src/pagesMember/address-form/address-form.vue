@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue"
+import { ref, defineProps } from "vue"
 
 // 表单数据
 const form = ref({
@@ -11,6 +11,16 @@ const form = ref({
   countyCode: "", // 区/县编码(后端参数)
   address: "", // 详细地址
   isDefault: 0, // 默认地址，1为是，0为否
+})
+
+//获取页面参数
+const query = defineProps<{
+  id?: string
+}>()
+
+//动态设置标题
+uni.setNavigationBarTitle({
+  title: query?.id ? "修改地址" : "新建地址",
 })
 </script>
 
