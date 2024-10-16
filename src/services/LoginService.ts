@@ -1,5 +1,5 @@
 import type { Result } from "@/types/global"
-import type { MemberInfo } from "@/types/member"
+import type { MemberLoginInfo } from "@/types/member"
 import HttpUtil from "@/utils/HttpUtil"
 
 /**登录参数 */
@@ -15,8 +15,8 @@ export default class LoginService {
    * @param data 请求参数
    * @returns 用户信息
    */
-  public static postWxMinAPI = (data: LoginParam): Promise<Result<MemberInfo>> => {
-    return HttpUtil.http<MemberInfo>({
+  public static postWxMinAPI = (data: LoginParam): Promise<Result<MemberLoginInfo>> => {
+    return HttpUtil.http<MemberLoginInfo>({
       method: "POST",
       url: "/login/wxMin",
       data,
@@ -28,8 +28,10 @@ export default class LoginService {
    * @param phoneNumber 手机号
    * @returns 用户信息
    */
-  public static postLoginWxMinSimpleAPI = (phoneNumber: string): Promise<Result<MemberInfo>> => {
-    return HttpUtil.http<MemberInfo>({
+  public static postLoginWxMinSimpleAPI = (
+    phoneNumber: string,
+  ): Promise<Result<MemberLoginInfo>> => {
+    return HttpUtil.http<MemberLoginInfo>({
       method: "POST",
       url: "/login/wxMin/simple",
       data: {

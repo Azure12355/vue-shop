@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import HotService from '@/services/HotService'
-import type { HotResult, SubTypeItem } from '@/types/hot'
-import { onLoad } from '@dcloudio/uni-app'
-import { ref } from 'vue'
+import HotService from "@/services/HotService"
+import type { HotResult, SubTypeItem } from "@/types/hot"
+import { onLoad } from "@dcloudio/uni-app"
+import { ref } from "vue"
 
 // 热门推荐页 标题和url
 const hotMap = [
-  { type: '1', title: '特惠推荐', url: '/hot/preference' },
-  { type: '2', title: '爆款推荐', url: '/hot/inVogue' },
-  { type: '3', title: '一站买全', url: '/hot/oneStop' },
-  { type: '4', title: '新鲜好物', url: '/hot/new' },
+  { type: "1", title: "特惠推荐", url: "/hot/preference" },
+  { type: "2", title: "爆款推荐", url: "/hot/inVogue" },
+  { type: "3", title: "一站买全", url: "/hot/oneStop" },
+  { type: "4", title: "新鲜好物", url: "/hot/new" },
 ]
 
 //接收路由传参
@@ -54,7 +54,7 @@ const onScrolltolower = async () => {
     // 标记已结束
     currsubTypes.finish = true
     // 退出并轻提示
-    return uni.showToast({ icon: 'none', title: '没有更多数据了~' })
+    return uni.showToast({ icon: "none", title: "没有更多数据了~" })
   }
 
   // 调用API传参
@@ -87,8 +87,8 @@ onLoad(() => {
         class="text"
         @tap="activeIndex = index"
         :class="{ active: index === activeIndex }"
-        >{{ item.title }}</text
-      >
+        >{{ item.title }}
+      </text>
     </view>
     <!-- 推荐列表 -->
     <scroll-view
@@ -116,7 +116,7 @@ onLoad(() => {
         </navigator>
       </view>
       <view class="loading-text">
-        {{ item.finish ? '没有更多数据了' : '正在加载...' }}
+        {{ item.finish ? "没有更多数据了" : "正在加载..." }}
       </view>
     </scroll-view>
   </view>
@@ -127,6 +127,7 @@ page {
   height: 100%;
   background-color: #f4f4f4;
 }
+
 .viewport {
   display: flex;
   flex-direction: column;
@@ -134,6 +135,7 @@ page {
   padding: 180rpx 0 0;
   position: relative;
 }
+
 .cover {
   width: 750rpx;
   height: 225rpx;
@@ -143,9 +145,11 @@ page {
   left: 0;
   top: 0;
 }
+
 .scroll-view {
   flex: 1;
 }
+
 .tabs {
   display: flex;
   justify-content: space-evenly;
@@ -159,13 +163,15 @@ page {
   background-color: #fff;
   position: relative;
   z-index: 9;
+
   .text {
     margin: 0 20rpx;
     position: relative;
   }
+
   .active {
     &::after {
-      content: '';
+      content: "";
       width: 40rpx;
       height: 4rpx;
       transform: translate(-50%);
@@ -176,11 +182,13 @@ page {
     }
   }
 }
+
 .goods {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   padding: 0 20rpx 20rpx;
+
   .navigator {
     width: 345rpx;
     padding: 20rpx;
@@ -188,22 +196,27 @@ page {
     border-radius: 10rpx;
     background-color: #fff;
   }
+
   .thumb {
     width: 305rpx;
     height: 305rpx;
   }
+
   .name {
     height: 88rpx;
     font-size: 26rpx;
   }
+
   .price {
     line-height: 1;
     color: #cf4444;
     font-size: 30rpx;
   }
+
   .symbol {
     font-size: 70%;
   }
+
   .decimal {
     font-size: 70%;
   }
