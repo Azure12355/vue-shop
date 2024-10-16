@@ -41,21 +41,21 @@ onLoad(() => {
       <view class="form-content">
         <view class="form-item">
           <text class="label">账号</text>
-          <text class="account">账号名</text>
+          <text class="account">{{ profile?.account }}</text>
         </view>
         <view class="form-item">
           <text class="label">昵称</text>
-          <input class="input" type="text" placeholder="请填写昵称" value="" />
+          <input class="input" type="text" placeholder="请填写昵称" :value="profile?.nickname" />
         </view>
         <view class="form-item">
           <text class="label">性别</text>
           <radio-group>
             <label class="radio">
-              <radio value="男" color="#27ba9b" :checked="true" />
+              <radio value="男" color="#27ba9b" :checked="profile?.gender === '男'" />
               男
             </label>
             <label class="radio">
-              <radio value="女" color="#27ba9b" :checked="false" />
+              <radio value="女" color="#27ba9b" :checked="profile?.gender === '女'" />
               女
             </label>
           </radio-group>
@@ -67,22 +67,22 @@ onLoad(() => {
             mode="date"
             start="1900-01-01"
             :end="new Date()"
-            value="2000-01-01"
+            :value="profile?.birthday"
           >
-            <view v-if="false">2000-01-01</view>
+            <view v-if="profile?.birthday">{{ profile?.birthday }}</view>
             <view class="placeholder" v-else>请选择日期</view>
           </picker>
         </view>
         <view class="form-item">
           <text class="label">城市</text>
-          <picker class="picker" mode="region" :value="['广东省', '广州市', '天河区']">
-            <view v-if="false">广东省广州市天河区</view>
+          <picker class="picker" mode="region" :value="profile?.fullLocation.split(' ')">
+            <view v-if="false">{{ profile?.fullLocation }}</view>
             <view class="placeholder" v-else>请选择城市</view>
           </picker>
         </view>
         <view class="form-item">
           <text class="label">职业</text>
-          <input class="input" type="text" placeholder="请填写职业" value="" />
+          <input class="input" type="text" placeholder="请填写职业" :value="profile?.profession" />
         </view>
       </view>
       <!-- 提交按钮 -->
