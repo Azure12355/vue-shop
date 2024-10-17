@@ -1,12 +1,16 @@
 <script setup lang="ts">
 //
 import XtxGuess from "@/components/XtxGuess.vue"
+import { useMemberStore } from "@/stores"
+
+//会员状态
+const memberStore = useMemberStore()
 </script>
 
 <template>
   <scroll-view scroll-y class="scroll-view">
     <!-- 已登录: 显示购物车 -->
-    <template v-if="true">
+    <template v-if="memberStore.profile">
       <!-- 购物车列表 -->
       <view class="cart-list" v-if="true">
         <!-- 优惠提示 -->
