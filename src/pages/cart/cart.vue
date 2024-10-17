@@ -1,10 +1,27 @@
 <script setup lang="ts">
-//
 import XtxGuess from "@/components/XtxGuess.vue"
 import { useMemberStore } from "@/stores"
+import { onShow } from "@dcloudio/uni-app"
+import { ref } from "vue"
+import type { CartItem } from "@/types/cart"
+import CartService from "@/services/CartService"
 
 //会员状态
 const memberStore = useMemberStore()
+
+//购物车列表
+const cartList = ref<CartItem[]>([])
+//获取购物车数据
+const getMemberCartListData = async () => {
+  const res = await CartService.getMemberCartListAPI()
+  cartList.value = res.result
+}
+
+onShow(() => {
+  if (memberStore.profile) {
+    getMemberCartListData()
+  }
+})
 </script>
 
 <template>

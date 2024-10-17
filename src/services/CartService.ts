@@ -17,4 +17,14 @@ export default class CartService {
       data,
     })
   }
+
+  /**
+   * 获取购物车列表
+   */
+  public static getMemberCartListAPI = (): Promise<Result<CartItem[]>> => {
+    return HttpUtil.http<CartItem[]>({
+      method: "GET",
+      url: "/member/cart",
+    })
+  }
 }
