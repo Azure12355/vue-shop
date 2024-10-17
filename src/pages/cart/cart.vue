@@ -5,6 +5,7 @@ import { onShow } from "@dcloudio/uni-app"
 import { ref } from "vue"
 import type { CartItem } from "@/types/cart"
 import CartService from "@/services/CartService"
+import { useGuessLike } from "@/composables/useGuessLike"
 
 //会员状态
 const memberStore = useMemberStore()
@@ -17,6 +18,9 @@ const getMemberCartListData = async () => {
   cartList.value = res.result
 }
 
+//猜你喜欢的组合式函数
+const { guessRef, onScrolltolower } = useGuessLike()
+
 //页面显示钩子
 onShow(() => {
   if (memberStore.profile) {
@@ -26,7 +30,7 @@ onShow(() => {
 </script>
 
 <template>
-  <scroll-view scroll-y class="scroll-view">
+  <scroll-view scroll-y class="scroll-view" @scrolltolower="onScrolltolower">
     <!-- 已登录: 显示购物车 -->
     <template v-if="memberStore.profile">
       <!-- 购物车列表 -->
