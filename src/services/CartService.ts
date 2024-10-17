@@ -27,4 +27,16 @@ export default class CartService {
       url: "/member/cart",
     })
   }
+
+  /**
+   * 删除/清空购物车单品
+   * @param data
+   */
+  public static delMemberCartAPI = (data: { ids: string[] }): Promise<Result<any>> => {
+    return HttpUtil.http({
+      method: "DELETE",
+      url: "/member/cart",
+      data,
+    })
+  }
 }

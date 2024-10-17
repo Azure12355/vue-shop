@@ -17,6 +17,26 @@ const getMemberCartListData = async () => {
   const res = await CartService.getMemberCartListAPI()
   cartList.value = res.result
 }
+//删除购物车单品
+const onDeleteCart = (skuId: string) => {
+  //弹窗二次确认
+  uni.showModal({
+    content: "确认删除?",
+    success: async (res) => {
+      if (res.confirm) {
+        try {
+          //后端删除单品
+          await CartService.delMemberCartAPI({ ids: [skuId] })
+          //重新获取购物车列表
+          await getMemberCartListData()
+          uni.showToast({ icon: "success", title: "删除成功" })
+        } catch (e) {
+          uni.showToast({ icon: "error", title: "删除购物车单品失败" })
+        }
+      }
+    },
+  })
+}
 
 //猜你喜欢的组合式函数
 const { guessRef, onScrolltolower } = useGuessLike()
@@ -70,7 +90,7 @@ onShow(() => {
             <!-- 右侧删除按钮 -->
             <template #right>
               <view class="cart-swipe-right">
-                <button class="button delete-button">删除</button>
+                <button class="button delete-button" @tap="onDeleteCart(item.skuId)">删除</button>
               </view>
             </template>
           </uni-swipe-action-item>
