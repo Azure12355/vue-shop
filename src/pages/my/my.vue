@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useGuessLike } from "@/composables/useGuessLike"
 import { useMemberStore } from "@/stores"
+import XtxGuess from "@/components/XtxGuess.vue"
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
