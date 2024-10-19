@@ -104,8 +104,8 @@ const onAddCart = async (e: SkuPopupEvent) => {
   }
 }
 //选定SKU生成订单信息
-const onBuyNow = () => {
-  uni.navigateTo({ url: "/pagesOrder/order-create/order-create" })
+const onBuyNow = (e: SkuPopupEvent) => {
+  uni.navigateTo({ url: `/pagesOrder/order-create/order-create?skuId=${e._id}&count=${e.buy_num}` })
 }
 
 onLoad(() => {

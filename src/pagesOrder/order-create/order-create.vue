@@ -27,12 +27,29 @@ const onChangeDelivery: UniHelper.SelectorPickerOnChange = (ev) => {
   activeIndex.value = ev.detail.value
 }
 
+//页面参数
+const query = defineProps<{
+  skuId?: string
+  count?: string
+}>()
+
 //预付订单
 const preOrder = ref<OrderPreResult>()
 //获取预付订单
 const getMemberOrderPreData = async () => {
-  const res = await OrderService.getMemberOrderPreAPI()
-  preOrder.value = res.result
+  //判断是否是立即购买
+  if (query.skuId && query.count) {
+    //立即购买
+    const res = await OrderService.getMemberOrderPreNowAPI({
+      skuId: query.skuId,
+      count: query.count,
+    })
+    preOrder.value = res.result
+  } else {
+    //购物车预付
+    const res = await OrderService.getMemberOrderPreAPI()
+    preOrder.value = res.result
+  }
 }
 
 //获取默认地址
