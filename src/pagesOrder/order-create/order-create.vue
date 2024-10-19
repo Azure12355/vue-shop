@@ -39,6 +39,10 @@ const getMemberOrderPreData = async () => {
 const defaultAddress = computed(() => {
   return addressStore?.addressList?.find((address) => address.isDefault === 1) || null
 })
+//商品总价
+const totalPrice = computed(() => {
+  return preOrder.value?.goods?.reduce((sum, goods) => sum + parseFloat(goods.totalPrice), 0)
+})
 onLoad(() => {
   getMemberOrderPreData()
 })
@@ -53,8 +57,8 @@ onLoad(() => {
       hover-class="none"
       url="/pagesMember/address/address?from=order"
     >
-      <view class="user"> {{ defaultAddress.receiver }} </view>
-      <view class="address"> {{ defaultAddress.fullLocation }} {{ defaultAddress.receiver }} </view>
+      <view class="user"> {{ defaultAddress.receiver }}</view>
+      <view class="address"> {{ defaultAddress.fullLocation }} {{ defaultAddress.receiver }}</view>
       <text class="icon icon-right"></text>
     </navigator>
     <navigator
@@ -63,31 +67,28 @@ onLoad(() => {
       hover-class="none"
       url="/pagesMember/address/address?from=order"
     >
-      <view class="address"> 请选择收货地址 </view>
+      <view class="address"> 请选择收货地址</view>
       <text class="icon icon-right"></text>
     </navigator>
 
     <!-- 商品信息 -->
     <view class="goods">
       <navigator
-        v-for="item in 2"
-        :key="item"
-        :url="`/pages/goods/goods?id=1`"
+        v-for="item in preOrder?.goods"
+        :key="item.skuId"
+        :url="`/pages/goods/goods?id=${item.id}`"
         class="item"
         hover-class="none"
       >
-        <image
-          class="picture"
-          src="https://yanxuan-item.nosdn.127.net/c07edde1047fa1bd0b795bed136c2bb2.jpg"
-        />
+        <image class="picture" :src="item.picture" />
         <view class="meta">
-          <view class="name ellipsis"> ins风小碎花泡泡袖衬110-160cm </view>
-          <view class="attrs">藏青小花 130</view>
+          <view class="name ellipsis"> {{ item.name }}</view>
+          <view class="attrs">{{ item.attrsText }}</view>
           <view class="prices">
-            <view class="pay-price symbol">99.00</view>
-            <view class="price symbol">99.00</view>
+            <view class="pay-price symbol">{{ item.price }}</view>
+            <view class="price symbol">{{ (parseInt(item.price) * 1.2).toFixed(2) }}</view>
           </view>
-          <view class="count">x5</view>
+          <view class="count">x{{ item.count }}</view>
         </view>
       </navigator>
     </view>
@@ -114,11 +115,11 @@ onLoad(() => {
     <!-- 支付金额 -->
     <view class="settlement">
       <view class="item">
-        <text class="text">商品总价: </text>
-        <text class="number symbol">495.00</text>
+        <text class="text">商品总价:</text>
+        <text class="number symbol">{{ totalPrice }}</text>
       </view>
       <view class="item">
-        <text class="text">运费: </text>
+        <text class="text">运费:</text>
         <text class="number symbol">5.00</text>
       </view>
     </view>
@@ -127,9 +128,9 @@ onLoad(() => {
   <!-- 吸底工具栏 -->
   <view class="toolbar" :style="{ paddingBottom: safeAreaInsets?.bottom + 'px' }">
     <view class="total-pay symbol">
-      <text class="number">99.00</text>
+      <text class="number">{{ totalPrice }}</text>
     </view>
-    <view class="button" :class="{ disabled: true }"> 提交订单 </view>
+    <view class="button" :class="{ disabled: defaultAddress == null }"> 提交订单</view>
   </view>
 </template>
 
