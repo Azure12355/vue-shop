@@ -18,9 +18,10 @@ const cartList = ref<CartItem[]>([])
 //获取购物车数据
 const getMemberCartListData = async () => {
   const res = await CartService.getMemberCartListAPI()
-  cartList.value = res.result
   //持久化到仓库
   cartStore.setCartList(res.result)
+
+  cartList.value = cartStore.cartList
 }
 //删除购物车单品
 const onDeleteCart = (skuId: string) => {
@@ -45,8 +46,6 @@ const onDeleteCart = (skuId: string) => {
 //修改商品数量
 const onChangeCount = async (e: InputNumberBoxEvent) => {
   await CartService.putMemberCartAPI(e.index, { count: e.value })
-  //更新购物车仓库
-  cartStore.setCartList(cartList.value)
 }
 
 //修改选中状态
@@ -55,8 +54,6 @@ const onChangeSelected = async (item: CartItem) => {
   item.selected = !item.selected
   //后端更新
   await CartService.putMemberCartAPI(item.skuId, { selected: item.selected })
-  //更新购物车仓库
-  cartStore.setCartList(cartList.value)
 }
 
 //计算全选状态
@@ -74,8 +71,6 @@ const onChangeSelectedAll = async () => {
   })
   //后端更新
   await CartService.putMemberCartSelectedAPI({ selected: _isSelectedAll })
-  //更新购物车仓库
-  cartStore.setCartList(cartList.value)
 }
 
 /*底部结算信息*/

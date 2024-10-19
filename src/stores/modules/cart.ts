@@ -29,11 +29,9 @@ export const useCartStore = defineStore(
     persist: {
       storage: {
         getItem(key) {
-          console.log(`从本地取出${key}`)
           return uni.getStorageSync(key)
         },
         setItem(key, value) {
-          console.log(`持久化保存${key}到本地`)
           uni.setStorageSync(key, value)
         },
       },
