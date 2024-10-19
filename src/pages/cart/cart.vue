@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import XtxGuess from "@/components/XtxGuess.vue"
-import { useMemberStore } from "@/stores"
-import { onShow } from "@dcloudio/uni-app"
+import { useCartStore, useMemberStore } from "@/stores"
+import { onLoad } from "@dcloudio/uni-app"
 import { ref, computed } from "vue"
 import type { CartItem } from "@/types/cart"
 import CartService from "@/services/CartService"
@@ -10,6 +10,8 @@ import type { InputNumberBoxEvent } from "@/components/vk-data-input-number-box/
 
 //会员状态
 const memberStore = useMemberStore()
+//购物车状态
+const cartStore = useCartStore()
 
 //购物车列表
 const cartList = ref<CartItem[]>([])
@@ -17,6 +19,8 @@ const cartList = ref<CartItem[]>([])
 const getMemberCartListData = async () => {
   const res = await CartService.getMemberCartListAPI()
   cartList.value = res.result
+  //持久化到仓库
+  cartStore.setCartList(res.result)
 }
 //删除购物车单品
 const onDeleteCart = (skuId: string) => {
@@ -41,6 +45,8 @@ const onDeleteCart = (skuId: string) => {
 //修改商品数量
 const onChangeCount = async (e: InputNumberBoxEvent) => {
   await CartService.putMemberCartAPI(e.index, { count: e.value })
+  //更新购物车仓库
+  cartStore.setCartList(cartList.value)
 }
 
 //修改选中状态
@@ -49,6 +55,8 @@ const onChangeSelected = async (item: CartItem) => {
   item.selected = !item.selected
   //后端更新
   await CartService.putMemberCartAPI(item.skuId, { selected: item.selected })
+  //更新购物车仓库
+  cartStore.setCartList(cartList.value)
 }
 
 //计算全选状态
@@ -57,7 +65,7 @@ const isSelectedAll = computed(() => {
 })
 
 //修改选中状态-全选
-const onChangeSelectedAll = () => {
+const onChangeSelectedAll = async () => {
   //全选状态取反
   const _isSelectedAll = !isSelectedAll.value
   //前端数据更新
@@ -65,7 +73,9 @@ const onChangeSelectedAll = () => {
     item.selected = _isSelectedAll
   })
   //后端更新
-  CartService.putMemberCartSelectedAPI({ selected: _isSelectedAll })
+  await CartService.putMemberCartSelectedAPI({ selected: _isSelectedAll })
+  //更新购物车仓库
+  cartStore.setCartList(cartList.value)
 }
 
 /*底部结算信息*/
@@ -99,9 +109,13 @@ const gotoPayment = () => {
 const { guessRef, onScrolltolower } = useGuessLike()
 
 //页面显示钩子
-onShow(() => {
+onLoad(() => {
   if (memberStore.profile) {
-    getMemberCartListData()
+    if (cartStore.cartList.length === 0) {
+      getMemberCartListData()
+    } else {
+      cartList.value = cartStore.cartList
+    }
   }
 })
 </script>
