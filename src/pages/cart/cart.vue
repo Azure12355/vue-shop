@@ -175,9 +175,13 @@ onShow(() => {
         <text class="text">合计:</text>
         <text class="amount">{{ selectedCartListMoney }}</text>
         <view class="button-grounp">
-          <view class="button payment-button" :class="{ disabled: selectedCartListCount === 0 }">
-            去结算({{ selectedCartListCount }})</view
+          <navigator
+            url="/pagesOrder/order-create/order-create"
+            class="button payment-button"
+            :class="{ disabled: selectedCartListCount === 0 }"
           >
+            去结算({{ selectedCartListCount }})
+          </navigator>
         </view>
       </view>
     </template>

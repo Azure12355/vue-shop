@@ -103,6 +103,10 @@ const onAddCart = async (e: SkuPopupEvent) => {
     uni.showToast({ icon: "error", title: "添加到购物车失败" })
   }
 }
+//选定SKU生成订单信息
+const onBuyNow = () => {
+  uni.navigateTo({ url: "/pagesOrder/order-create/order-create" })
+}
 
 onLoad(() => {
   getGoodsData()
@@ -144,6 +148,7 @@ onLoad(() => {
         :mode="mode"
         ref="skuPopupRef"
         @add-cart="onAddCart"
+        @buy-now="onBuyNow"
       />
 
       <!-- 操作面板 -->
