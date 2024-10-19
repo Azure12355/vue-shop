@@ -2,6 +2,10 @@
 import { ref, defineProps } from "vue"
 import AddressService from "@/services/AddressService"
 import { onLoad } from "@dcloudio/uni-app"
+import { useAddressStore } from "@/stores"
+
+//地址仓库
+const addressStore = useAddressStore()
 
 // 表单数据
 const form = ref({
@@ -89,6 +93,11 @@ const onSubmit = async () => {
 
     //成功提示
     uni.showToast({ icon: "success", title: query.id ? "修改成功" : "添加成功" })
+    //更新数据仓库
+    const res = await AddressService.getMemberAddressAPI()
+    //持久化存储到仓库中
+    addressStore.setAddressList(res.result)
+
     //返回上一页
     setTimeout(() => {
       uni.navigateBack()

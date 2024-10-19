@@ -4,16 +4,26 @@ import { ref } from "vue"
 import type { AddressItem } from "@/types/address"
 import AddressService from "@/services/AddressService"
 import { onShow } from "@dcloudio/uni-app"
+import { useAddressStore } from "@/stores"
+
+//地址仓库
+const addressStore = useAddressStore()
 
 // 获取收货地址列表数据
 const addressList = ref<AddressItem[]>([])
 const getMemberAddressData = async () => {
   const res = await AddressService.getMemberAddressAPI()
-  addressList.value = res.result
+  //持久化存储到仓库中
+  addressStore.setAddressList(res.result)
+  addressList.value = addressStore.addressList
 }
 
 onShow(() => {
-  getMemberAddressData()
+  if (addressStore.addressList.length === 0) {
+    getMemberAddressData()
+  } else {
+    addressList.value = addressStore.addressList
+  }
 })
 </script>
 

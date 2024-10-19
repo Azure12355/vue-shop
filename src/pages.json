@@ -152,13 +152,15 @@
     "pages/cart/cart": {
       "network": "all",
       "packages": [
-        "pagesOrder"
+        "pagesOrder",
+        "pagesMember"
       ]
     },
     "pages/goods/goods": {
       "network": "all",
       "packages": [
-        "pagesOrder"
+        "pagesOrder",
+        "pagesMember"
       ]
     }
   }

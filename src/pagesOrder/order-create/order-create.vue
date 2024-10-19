@@ -1,5 +1,12 @@
 <script setup lang="ts">
 import { computed, ref } from "vue"
+import type { OrderPreResult } from "@/types/order"
+import OrderService from "@/services/OrderService"
+import { onLoad } from "@dcloudio/uni-app"
+import { useAddressStore } from "@/stores"
+
+//地址仓库
+const addressStore = useAddressStore()
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
@@ -19,19 +26,35 @@ const activeDelivery = computed(() => deliveryList.value[activeIndex.value])
 const onChangeDelivery: UniHelper.SelectorPickerOnChange = (ev) => {
   activeIndex.value = ev.detail.value
 }
+
+//预付订单
+const preOrder = ref<OrderPreResult>()
+//获取预付订单
+const getMemberOrderPreData = async () => {
+  const res = await OrderService.getMemberOrderPreAPI()
+  preOrder.value = res.result
+}
+
+//获取默认地址
+const defaultAddress = computed(() => {
+  return addressStore?.addressList?.find((address) => address.isDefault === 1) || null
+})
+onLoad(() => {
+  getMemberOrderPreData()
+})
 </script>
 
 <template>
   <scroll-view scroll-y class="viewport">
     <!-- 收货地址 -->
     <navigator
-      v-if="false"
+      v-if="defaultAddress"
       class="shipment"
       hover-class="none"
       url="/pagesMember/address/address?from=order"
     >
-      <view class="user"> 张三 13333333333 </view>
-      <view class="address"> 广东省 广州市 天河区 黑马程序员3 </view>
+      <view class="user"> {{ defaultAddress.receiver }} </view>
+      <view class="address"> {{ defaultAddress.fullLocation }} {{ defaultAddress.receiver }} </view>
       <text class="icon icon-right"></text>
     </navigator>
     <navigator
