@@ -4,6 +4,7 @@ import type { OrderPreResult } from "@/types/order"
 import OrderService from "@/services/OrderService"
 import { onLoad } from "@dcloudio/uni-app"
 import { useAddressStore } from "@/stores"
+import Goods from "@/pages/goods/goods.vue"
 
 //地址仓库
 const addressStore = useAddressStore()
@@ -31,6 +32,7 @@ const onChangeDelivery: UniHelper.SelectorPickerOnChange = (ev) => {
 const query = defineProps<{
   skuId?: string
   count?: string
+  orderId?: string
 }>()
 
 //预付订单
@@ -45,8 +47,12 @@ const getMemberOrderPreData = async () => {
       count: query.count,
     })
     preOrder.value = res.result
-  } else {
+  } else if (query.orderId) {
     //购物车预付
+    const res = await OrderService.getMemberOrderPreAPI()
+    preOrder.value = res.result
+  } else {
+    //预付订单
     const res = await OrderService.getMemberOrderPreAPI()
     preOrder.value = res.result
   }
@@ -60,6 +66,30 @@ const defaultAddress = computed(() => {
 const totalPrice = computed(() => {
   return preOrder.value?.goods?.reduce((sum, goods) => sum + parseFloat(goods.totalPrice), 0)
 })
+
+/*提交订单*/
+const onOrderSubmit = async () => {
+  try {
+    //没有收获地址提醒
+    if (!defaultAddress.value?.id) {
+      return uni.showToast({ icon: "none", title: "请选择收获地址" })
+    }
+    //发送请求
+    const res = await OrderService.postMemberOrderAPI({
+      addressId: defaultAddress.value?.id,
+      buyerMessage: buyerMessage.value,
+      deliveryTimeType: activeDelivery.value.type,
+      goods: preOrder.value!.goods.map((v) => ({ count: v.count, skuId: v.skuId })),
+      payChannel: 2,
+      payType: 1,
+    })
+    //关闭当前页面, 跳转到订单详情, 传递订单id
+    uni.redirectTo({ url: `/pagesOrder/order-details/order-details?id=${res.result.id}` })
+  } catch (e) {
+    uni.showToast({ icon: "none", title: "提交订单失败" })
+  }
+}
+
 onLoad(() => {
   getMemberOrderPreData()
 })
@@ -74,7 +104,7 @@ onLoad(() => {
       hover-class="none"
       url="/pagesMember/address/address?from=order"
     >
-      <view class="user"> {{ defaultAddress.receiver }}</view>
+      <view class="user"> {{ defaultAddress.receiver }} {{ defaultAddress.contact }}</view>
       <view class="address"> {{ defaultAddress.fullLocation }} {{ defaultAddress.receiver }}</view>
       <text class="icon icon-right"></text>
     </navigator>
@@ -147,7 +177,9 @@ onLoad(() => {
     <view class="total-pay symbol">
       <text class="number">{{ totalPrice }}</text>
     </view>
-    <view class="button" :class="{ disabled: defaultAddress == null }"> 提交订单</view>
+    <view class="button" :class="{ disabled: defaultAddress == null }" @tap="onOrderSubmit">
+      提交订单</view
+    >
   </view>
 </template>
 

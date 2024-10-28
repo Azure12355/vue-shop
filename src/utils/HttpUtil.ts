@@ -8,7 +8,10 @@ export default class HttpUtil {
   //网络请求的基地址
   private static BASE_URL = "https://pcapi-xiaotuxian-front-devtest.itheima.net"
 
-  //uni的拦截器
+  /**
+   * 设置uni的拦截器
+   * @private
+   */
   private uniInterceptor: UniNamespace.InterceptorOptions = {
     //请求拦截器
     invoke: (options: UniApp.RequestOptions) => {
