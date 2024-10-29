@@ -3,8 +3,9 @@ import { computed, ref } from "vue"
 import type { OrderPreResult } from "@/types/order"
 import OrderService from "@/services/OrderService"
 import { onLoad } from "@dcloudio/uni-app"
-import { useAddressStore } from "@/stores"
+import { useAddressStore, useCartStore } from "@/stores"
 import Goods from "@/pages/goods/goods.vue"
+import CartService from "@/services/CartService"
 
 //地址仓库
 const addressStore = useAddressStore()
@@ -83,6 +84,10 @@ const onOrderSubmit = async () => {
       payChannel: 2,
       payType: 1,
     })
+    //提交订单后, 重新刷新购物车
+    const cartRes = await CartService.getMemberCartListAPI()
+    useCartStore().setCartList(cartRes.result)
+
     //关闭当前页面, 跳转到订单详情, 传递订单id
     uni.redirectTo({ url: `/pagesOrder/order-details/order-details?id=${res.result.id}` })
   } catch (e) {
@@ -177,9 +182,8 @@ onLoad(() => {
     <view class="total-pay symbol">
       <text class="number">{{ totalPrice }}</text>
     </view>
-    <view class="button" :class="{ disabled: defaultAddress == null }" @tap="onOrderSubmit">
-      提交订单</view
-    >
+    <view class="button" :class="{ disabled: defaultAddress == null }" @tap="onOrderSubmit"> </view>
+    提交订单
   </view>
 </template>
 
