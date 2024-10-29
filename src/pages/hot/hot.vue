@@ -175,7 +175,7 @@ page {
       width: 40rpx;
       height: 4rpx;
       transform: translate(-50%);
-      background-color: #27ba9b;
+      background-color: #ed7003;
       position: absolute;
       left: 50%;
       bottom: 24rpx;

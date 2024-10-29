@@ -157,7 +157,7 @@ page {
       top: 0;
       width: 8rpx;
       height: 100%;
-      background-color: #27ba9b;
+      background-color: #ed7003;
     }
   }
 }

@@ -86,7 +86,7 @@ page {
     width: 20%;
     height: 6rpx;
     padding: 0 50rpx;
-    background-color: #27ba9b;
+    background-color: #ed7003;
     /* 过渡效果 */
     transition: all 0.4s;
   }
@@ -241,13 +241,13 @@ page {
     }
 
     .secondary {
-      color: #27ba9b;
-      border-color: #27ba9b;
+      color: #ed7003;
+      border-color: #ed7003;
     }
 
     .primary {
       color: #fff;
-      background-color: #27ba9b;
+      background-color: #ed7003;
     }
   }
 

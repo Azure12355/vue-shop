@@ -239,7 +239,7 @@ onShow(() => {
       padding: 7rpx 15rpx 5rpx;
       border-radius: 4rpx;
       font-size: 24rpx;
-      background-color: #27ba9b;
+      background-color: #ed7003;
       margin-right: 10rpx;
     }
   }
@@ -276,7 +276,7 @@ onShow(() => {
 
       &.checked::before {
         content: "\e6cc";
-        color: #27ba9b;
+        color: #ed7003;
       }
     }
 
@@ -407,7 +407,7 @@ onShow(() => {
     font-size: 26rpx;
     border-radius: 60rpx;
     color: #fff;
-    background-color: #27ba9b;
+    background-color: #ed7003;
   }
 }
 
@@ -445,7 +445,7 @@ onShow(() => {
 
   .checked::before {
     content: "\e6cc";
-    color: #27ba9b;
+    color: #ed7003;
   }
 
   .text {
@@ -485,7 +485,7 @@ onShow(() => {
     }
 
     .payment-button {
-      background-color: #27ba9b;
+      background-color: #ed7003;
 
       &.disabled {
         opacity: 0.6;

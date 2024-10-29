@@ -277,7 +277,7 @@ page {
       font-size: 28rpx;
       color: #333;
       font-weight: 600;
-      border-left: 4rpx solid #27ba9b;
+      border-left: 4rpx solid #ed7003;
     }
 
     navigator {
@@ -350,7 +350,7 @@ page {
       color: #fff;
       font-size: 34rpx;
       box-sizing: border-box;
-      background-color: #35c8a9;
+      background-color: #ed7003;
     }
 
     .number {
@@ -529,7 +529,7 @@ page {
 
     .buynow,
     .payment {
-      background-color: #27ba9b;
+      background-color: #ed7003;
       margin-left: 20rpx;
     }
   }

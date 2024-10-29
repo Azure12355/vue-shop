@@ -482,7 +482,7 @@ page {
     text-align: center;
     line-height: 64rpx;
     font-size: 28rpx;
-    color: #27ba9b;
+    color: #ed7003;
     border-radius: 68rpx;
     background-color: #fff;
   }
@@ -634,8 +634,8 @@ page {
       }
 
       .primary {
-        color: #27ba9b;
-        border-color: #27ba9b;
+        color: #ed7003;
+        border-color: #ed7003;
       }
     }
   }
@@ -745,14 +745,14 @@ page {
 
   .secondary {
     order: 2;
-    color: #27ba9b;
-    border-color: #27ba9b;
+    color: #ed7003;
+    border-color: #ed7003;
   }
 
   .primary {
     order: 1;
     color: #fff;
-    background-color: #27ba9b;
+    background-color: #ed7003;
   }
 }
 
@@ -794,7 +794,7 @@ page {
     .icon.checked::before {
       content: "\e6cc";
       font-size: 38rpx;
-      color: #27ba9b;
+      color: #ed7003;
     }
   }
 
@@ -818,7 +818,7 @@ page {
 
     .primary {
       color: #fff;
-      background-color: #27ba9b;
+      background-color: #ed7003;
       border: none;
     }
   }

@@ -83,7 +83,7 @@ const emit = defineEmits<{
     right: 0;
   }
   .icon-checked {
-    color: #27ba9b;
+    color: #ed7003;
   }
   .icon-ring {
     color: #444;
@@ -118,7 +118,7 @@ const emit = defineEmits<{
 
   .primary {
     color: #fff;
-    background-color: #27ba9b;
+    background-color: #ed7003;
   }
 
   .secondary {

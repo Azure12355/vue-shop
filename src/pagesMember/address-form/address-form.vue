@@ -150,7 +150,7 @@ onLoad(() => {
         <label class="label">设为默认地址</label>
         <switch
           class="switch"
-          color="#27ba9b"
+          color="#ed7003"
           :checked="form.isDefault === 1"
           @change="onSwitchChange"
         />
@@ -230,6 +230,6 @@ page {
   color: #fff;
   border-radius: 80rpx;
   font-size: 30rpx;
-  background-color: #27ba9b;
+  background-color: #ed7003;
 }
 </style>
