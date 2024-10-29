@@ -4,7 +4,6 @@ import type { OrderPreResult } from "@/types/order"
 import OrderService from "@/services/OrderService"
 import { onLoad } from "@dcloudio/uni-app"
 import { useAddressStore, useCartStore } from "@/stores"
-import Goods from "@/pages/goods/goods.vue"
 import CartService from "@/services/CartService"
 
 //地址仓库
@@ -54,7 +53,7 @@ const getMemberOrderPreData = async () => {
     preOrder.value = res.result
   } else {
     //预付订单
-    const res = await OrderService.getMemberOrderPreAPI()
+    const res = await OrderService.getMemberOrderRepurchaseByIdAPI(query.orderId!)
     preOrder.value = res.result
   }
 }
@@ -182,8 +181,9 @@ onLoad(() => {
     <view class="total-pay symbol">
       <text class="number">{{ totalPrice }}</text>
     </view>
-    <view class="button" :class="{ disabled: defaultAddress == null }" @tap="onOrderSubmit"> </view>
-    提交订单
+    <view class="button" :class="{ disabled: defaultAddress == null }" @tap="onOrderSubmit">
+      提交订单
+    </view>
   </view>
 </template>
 

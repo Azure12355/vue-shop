@@ -150,6 +150,13 @@
           "style": {
             "navigationBarTitleText": "支付成功页"
           }
+        },
+        {
+          "path": "order-list/order-list",
+          "style": {
+            "navigationBarTitleText": "订单列表",
+            "enablePullDownRefresh": false
+          }
         }
       ]
     }

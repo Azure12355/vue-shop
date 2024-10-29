@@ -11,6 +11,7 @@ import type {
   SkuPopupLocaldata,
 } from "@/components/vk-data-goods-sku-popup/vk-data-goods-sku-popup"
 import CartService from "@/services/CartService"
+import { useCartStore } from "@/stores"
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
@@ -97,6 +98,8 @@ const selectedArrText = computed(() => {
 const onAddCart = async (e: SkuPopupEvent) => {
   try {
     await CartService.postMemberCartAPI({ skuId: e._id, count: e.buy_num })
+    //重新请求购物车列表
+    await useCartStore().refreshCartList()
     uni.showToast({ title: "添加成功" })
     isShowSKU.value = false
   } catch (e) {

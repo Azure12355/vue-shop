@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import XtxGuess from "@/components/XtxGuess.vue"
 import { useCartStore, useMemberStore } from "@/stores"
-import { onLoad } from "@dcloudio/uni-app"
+import { onShow } from "@dcloudio/uni-app"
 import { ref, computed } from "vue"
 import type { CartItem } from "@/types/cart"
 import CartService from "@/services/CartService"
@@ -18,10 +18,7 @@ const cartList = ref<CartItem[]>([])
 //获取购物车数据
 const getMemberCartListData = async () => {
   const res = await CartService.getMemberCartListAPI()
-  //持久化到仓库
-  cartStore.setCartList(res.result)
-
-  cartList.value = cartStore.cartList
+  cartList.value = res.result
 }
 //删除购物车单品
 const onDeleteCart = (skuId: string) => {
@@ -104,14 +101,15 @@ const gotoPayment = () => {
 const { guessRef, onScrolltolower } = useGuessLike()
 
 //页面显示钩子
-onLoad(() => {
-  if (memberStore.profile) {
+onShow(() => {
+  /*if (memberStore.profile) {
     if (cartStore.cartList.length === 0) {
       getMemberCartListData()
     } else {
       cartList.value = cartStore.cartList
     }
-  }
+  }*/
+  getMemberCartListData()
 })
 </script>
 

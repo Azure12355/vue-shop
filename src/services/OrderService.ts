@@ -1,5 +1,12 @@
 import HttpUtil from "@/utils/HttpUtil"
-import type { OrderCreateParams, OrderPreResult, OrderResult } from "@/types/order"
+import type {
+  OrderCreateParams,
+  OrderListParams,
+  OrderListResult,
+  OrderLogisticResult,
+  OrderPreResult,
+  OrderResult,
+} from "@/types/order"
 import type { Result } from "@/types/global"
 
 export default class OrderService {
@@ -71,6 +78,76 @@ export default class OrderService {
     return HttpUtil.http({
       method: "GET",
       url: "/pay/mock",
+      data,
+    })
+  }
+
+  /**
+   * 模拟发货
+   * @param id
+   */
+  public static getMemberOrderConsignmentByIdAPI = (id: string) => {
+    return HttpUtil.http({
+      method: "GET",
+      url: `/member/order/consignment/${id}`,
+    })
+  }
+
+  /**
+   * 模拟确认收货
+   * @param id
+   */
+  public static putMemberOrderReceiptByIdAPI = (id: string) => {
+    return HttpUtil.http<OrderResult>({
+      method: "PUT",
+      url: `/member/order/${id}/receipt`,
+    })
+  }
+
+  /**
+   * 获取订单物流
+   * @param id
+   */
+  public static getMemberOrderLogisticsByIdAPI = (id: string) => {
+    return HttpUtil.http<OrderLogisticResult>({
+      method: "GET",
+      url: `/member/order/${id}/logistics`,
+    })
+  }
+
+  /**
+   * 删除订单
+   * @param data
+   * { ids: string[] }
+   */
+  public static deleteMemberOrderAPI = (data: { ids: string[] }) => {
+    return HttpUtil.http({
+      method: "DELETE",
+      url: `/member/order`,
+      data,
+    })
+  }
+
+  /**
+   * 取消订单
+   * @param id
+   * @param data { cancelReason: string }
+   */
+  public static getMemberOrderCancelByIdAPI = (id: string, data: { cancelReason: string }) => {
+    return HttpUtil.http<OrderResult>({
+      method: "PUT",
+      url: `/member/order/${id}/cancel`,
+      data,
+    })
+  }
+
+  /**
+   * 获取订单列表
+   */
+  public static getMemberOrderAPI = (data: OrderListParams) => {
+    return HttpUtil.http<OrderListResult>({
+      method: "GET",
+      url: "/member/order",
       data,
     })
   }
