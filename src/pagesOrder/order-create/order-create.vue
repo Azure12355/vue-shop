@@ -49,11 +49,11 @@ const getMemberOrderPreData = async () => {
     preOrder.value = res.result
   } else if (query.orderId) {
     //购物车预付
-    const res = await OrderService.getMemberOrderPreAPI()
+    const res = await OrderService.getMemberOrderRepurchaseByIdAPI(query.orderId)
     preOrder.value = res.result
   } else {
     //预付订单
-    const res = await OrderService.getMemberOrderRepurchaseByIdAPI(query.orderId!)
+    const res = await OrderService.getMemberOrderPreAPI()
     preOrder.value = res.result
   }
 }
